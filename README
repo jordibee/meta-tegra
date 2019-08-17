@@ -16,25 +16,8 @@ URI: git://git.openembedded.org/openembedded-core
 branch: master
 LAYERSERIES_COMPAT: warrior
 
-WORK-IN-PROGRESS STATUS
------------------------
-
-* core-image-sato builds, boots, and passes basic tests on
-  TX1, TX2, Nano, Xavier
-
-* core-image-weston builds and boots on TX1, TX2, Nano, Xavier,
-  with some issues:
-  - gstreamer nveglgles plugin not displaying anything
-  - capture test not working on Jetson-TX1
-
-* BUP packages are now getting built, still need testing
-
 TO DO
 -----
-
-* look into the nveglgles gstreamer issue with Weston
-
-* test OTA/BUP on TX2 and Xavier
 
 * look at OTA/BUP for TX1/Nano, since it looks like
   there's some support there now
@@ -42,8 +25,6 @@ TO DO
 * look at building trusty and cboot (t194) from sources
 
 * look at container support
-
-* run through more tests and fix up any issues
 
 
 PLEASE NOTE
@@ -61,7 +42,18 @@ PLEASE NOTE
   (e.g., local.conf) to make them available to your bitbake
   builds.
 
-* The tensorrt 5.1.6 packages for Xavier, are different from
+* The SDK Manager downloads a different package of CUDA host-side
+  tools depending on whether you are running Ubuntu 16.04
+  or 18.04. If you downloaded the Ubuntu 16.04 package, you
+  should add
+
+      CUDA_BINARIES_NATIVE = "cuda-binaries-ubuntu1604-native"
+
+  to your build configuration so the CUDA recipes can find
+  them. Otherwise, the recipes will default to looking for
+  the Ubuntu 18.04 package.
+
+* The tensorrt 5.1.6 packages for Xavier are different from
   those for TX1/TX2, even though the deb files have the same
   name.  If you need to build for Xavier and another platform
   and include tensorrt 5.1.6, create a subdirectory called

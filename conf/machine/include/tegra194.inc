@@ -8,13 +8,15 @@ require conf/machine/include/arm/arch-armv8.inc
 KERNEL_IMAGETYPE = "Image"
 
 MACHINE_FEATURES = "alsa usbhost pci rtc cuda"
-MACHINE_ESSENTIAL_EXTRA_RDEPENDS = "tegra-firmware kernel-devicetree kernel-image"
+MACHINE_ESSENTIAL_EXTRA_RDEPENDS = "tegra-firmware kernel-devicetree kernel-image u-boot"
 MACHINE_EXTRA_RDEPENDS = "tegra-nvpmodel tegra-nvphs tegra-nvs-service tegra-configs-nvstartup tegra-configs-udev kernel-module-nvgpu kernel-module-nvs"
 
-INITRD_IMAGE ?=	"tegra-minimal-initramfs"
-IMAGE_CLASSES_append = " image_types_cboot"
-INITRD_FSTYPES ?= "cpio.gz.cboot cpio.gz.cboot.bup-payload"
-IMAGE_UBOOT ?= ""
+INITRAMFS_IMAGE ?= "${@'' if d.getVar('PREFERRED_PROVIDER_virtual/bootloader').startswith('cboot') else 'tegra-minimal-initramfs'}"
+TEGRA_INITRAMFS_INITRD ?= "${@'' if d.getVar('PREFERRED_PROVIDER_virtual/bootloader').startswith('cboot') else '1'}"
+INITRD_IMAGE ?= "${@'tegra-minimal-initramfs' if d.getVar('PREFERRED_PROVIDER_virtual/bootloader').startswith('cboot') else ''}"
+INITRD_FSTYPES ?= "${@'cpio.gz.cboot cpio.gz.cboot.bup-payload' if d.getVar('PREFERRED_PROVIDER_virtual/bootloader').startswith('cboot') else '${INITRAMFS_FSTYPES}'}"
+IMAGE_CLASSES_append = "${@' image_types_cboot' if d.getVar('PREFERRED_PROVIDER_virtual/bootloader').startswith('cboot') else ''}"
+IMAGE_UBOOT ?= "${@'' if d.getVar('PREFERRED_PROVIDER_virtual/bootloader').startswith('cboot') else 'u-boot'}"
 
 TEGRA_AUDIO_DEVICE ?= "tegrahdat194ref"
 
@@ -35,7 +37,7 @@ CUDA_NVCC_ARCH_FLAGS ?= "--gpu-architecture=compute_72 --gpu-code=sm_72"
 
 PREFERRED_PROVIDER_libdrm = "libdrm-tegra-shim"
 PREFERRED_PROVIDER_drm = "libdrm-tegra-shim"
-PREFERRED_PROVIDER_virtual/bootloader ?= "cboot-prebuilt"
+PREFERRED_PROVIDER_virtual/bootloader ?= "u-boot-tegra"
 PREFERRED_PROVIDER_cboot ?= "cboot-prebuilt"
 
 require conf/machine/include/tegra-common.inc

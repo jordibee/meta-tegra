@@ -48,3 +48,5 @@ require conf/machine/include/tegra-common.inc
 L4T_BSP_NAME = "jax-tx2"
 L4T_BSP_BASEPFX = "JAX-TX2"
 L4T_BSP_PREFIX = "${L4T_BSP_BASEPFX}-Jetson"
+
+NVPMODEL ?= "nvpmodel_t186"

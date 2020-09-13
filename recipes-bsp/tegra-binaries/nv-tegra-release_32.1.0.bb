@@ -1,3 +1,5 @@
+FRANKENSTEIN = "no"
+
 require recipes-bsp/tegra-binaries/tegra-binaries-${PV}.inc
 require recipes-bsp/tegra-binaries/tegra-shared-binaries.inc
 

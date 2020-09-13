@@ -1,3 +1,5 @@
+FRANKENSTEIN = "no"
+
 SOC_FAMILY = "tegra186"
 
 require tegra-binaries-${PV}.inc

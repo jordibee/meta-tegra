@@ -1,3 +1,5 @@
+FRANKENSTEIN = "no"
+
 require tegra-binaries-${PV}.inc
 require tegra-shared-binaries.inc
 
@@ -16,6 +18,7 @@ SDCARD_LAYOUT_TEMPLATE ??= ""
 SDCARD_PARTITION_FILE ?= "${@'${S}/bootloader/${NVIDIA_BOARD}/cfg/${SDCARD_LAYOUT_TEMPLATE}' if d.getVar('SDCARD_LAYOUT_TEMPLATE') else ''}"
 SMD_CFG ?= "${S}/bootloader/smd_info.cfg"
 CBOOTOPTION_FILE ?= "${S}/bootloader/cbo.dts"
+PART_FILE = "${@'flash_l4t_t186.custom.xml' if d.getVar('SOC_FAMILY') == 'tegra186' else 'flash_t194_sdmmc.custom.xml'}"
 
 BOOTBINS_tegra186 = "\
     adsp-fw.bin \
@@ -96,6 +99,10 @@ do_compile_append_tegra194() {
 }
 
 do_install() {
+    # I need to do this because mender copies some required files only to the workspace of
+    # the 32.3.1 binaries...
+    cp "${TMPDIR}/work-shared/L4T-${SOC_FAMILY}-32.3.1-r0/Linux_for_Tegra/${PART_FILE}" "${TMPDIR}/work-shared/L4T-native-tegra186-32.1.0-r0/Linux_for_Tegra/${PART_FILE}"
+
     install -d ${D}${datadir}/tegraflash
     for f in ${BOOTBINS}; do
         install -m 0644 ${S}/bootloader/$f ${D}${datadir}/tegraflash

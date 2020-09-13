@@ -1,3 +1,5 @@
+FRANKENSTEIN = "no"
+
 require tegra-binaries-${PV}.inc
 require tegra-shared-binaries.inc
 
